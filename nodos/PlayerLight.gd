@@ -1,7 +1,10 @@
 extends KinematicBody2D
 
 onready var IsInterruptor = $"../isInterruptor"
+
+
 export var onInterruptor = false
+var InterruptorActual = {}
 onready var tiempo = $"../Timer"
 onready var progreso = $"../CanvasLayer/BarraCansancio"
 onready var barraCansancio = $"../CanvasLayer/AnimatedSprite"
@@ -18,16 +21,20 @@ func _backToMenu():
 	get_tree().change_scene("res://Menu.tscn")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-const SPEED = 120
+export var SPEED = 120
 var motion = Vector2()
 var direction = 0
 var asustado = false
+var objetos = {"papeles": false,
+"llave": false,
+"destornillador": false,
+"camara": false}
 
 #MOVIMIENTO DE PERSONAJE
 
 #Valor en Porcentaje
 var cansancio = 100
-export var cansancioDescenso = 0.015
+export var cansancioDescenso = 0.01
 export var cansancioLimite = 40
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -78,7 +85,7 @@ func _physics_process(delta):
 	#if(Input.is_action_just_pressed("ui_accept") && onInterruptor == true && tiempo.time_left <= 0):
 	if(Input.is_action_just_pressed("mouse")):
 		if isTriggerEnemy(): print("test" + str(range(1,32)))
-		if onInterruptor && tiempo.time_left <= 0:
+		if onInterruptor && tiempo.time_left <= 0 && !InterruptorActual.isOn:
 			tiempo.start()
 			progreso.value = 0
 			progreso.visible = true
@@ -90,6 +97,12 @@ func _physics_process(delta):
 	
 	# Barra de Cansancio
 	barraCansancio.play("barra" + str(int(cansancio/10)-2))
+	
+	# Barra de Objetos
+	$"../CanvasLayer/papeles".visible = objetos["papeles"]
+	$"../CanvasLayer/llave".visible = objetos["llave"]
+	$"../CanvasLayer/destornillador".visible = objetos["destornillador"]
+	$"../CanvasLayer/camara".visible = objetos["camara"]
 
 func isTriggerEnemy():
 	var mousePos = get_viewport().get_mouse_position()
@@ -110,12 +123,15 @@ func _processDescanso():
 func _on_Timer_timeout():
 	var currentScene := get_tree().get_current_scene()
 	var tmpArr = currentScene.interruptoresArreglados
-	tmpArr[0] = true
+	#tmpArr[0] = true
+	if !InterruptorActual.isOn:
+		InterruptorActual.isOn = true
+		$"../soundBeep".play()
 	
-	for v in range(tmpArr.size()):
-		if(tmpArr[v] == false):
-			tmpArr[v] = true
-			break
+#	for v in range(tmpArr.size()):
+#		if(tmpArr[v] == false):
+#			tmpArr[v] = true
+#			break
 	
 	currentScene.interruptoresArreglados = tmpArr
 	progreso.visible = false

@@ -46,28 +46,19 @@ func moveToPath(posA, posB,distance):
 		path.remove(0)
 
 func _physics_process(delta : float):
-	var posicionPlayer = $"../PlayerLight".position
+	var posicionPlayer = $"../MenuPlayer".position
 	var distanciaActual = sqrt(pow(posicionPlayer.x - position.x,2) + pow(posicionPlayer.y - position.y, 2))
 
 	var distance : = Velocidad * delta
 	if distanciaActual < Distancia:
 		# Si el asesino encuentra al jugador
 		distance = (Velocidad + 15) * delta
-		$"../AudioStreamPlayer2".volume_db = -(distanciaActual * 0.068) #*0.058
 		moveToPath(position,posicionPlayer,distance)
-		$"../PlayerLight".asustado = true
 		print(distanciaActual)
-		if distanciaActual < 135: 
-			if !$"../soundMonkeyDie".playing: $"../soundMonkeyDie".play()
+	
 	else:
-		if $"../AudioStreamPlayer2".volume_db > -80: $"../AudioStreamPlayer2".volume_db -= 0.1
 		moveToPath(position,currentInterruptor.position,distance)
-		$"../PlayerLight".asustado = false
-		
+	
 	if Direccion > 0:
 		$AnimatedSprite.play("derecha_anim")
 	else: $AnimatedSprite.play("izquierda_anim")
-
-func _on_Area2D_body_entered(body):
-	if(body.name == 'PlayerLight'):
-		get_tree().reload_current_scene()

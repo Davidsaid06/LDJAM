@@ -21,6 +21,8 @@ func _quit():
 
 func _on_ExitButton_button_up():
 	
+	$SFX2.play()
+	
 	attempts += 1
 	
 	var dialog = $AcceptDialog

@@ -16,6 +16,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if(isJugador && Input.is_action_just_pressed("mouse")):
+		$"../soundMonkeyActive".play()
 		guiapanel.visible = true
 		guiapanel.get_node("RichTextLabel").text = text
 		get_tree().paused = true

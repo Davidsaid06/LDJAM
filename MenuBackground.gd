@@ -29,10 +29,6 @@ func _process(delta):
 		set_process(false)
 	pass
 
-
-
-
-
 func _on_PuertaDeSalida_body_entered(body):
 	if checkInterruptoresListos():
 		print("Nivel Reiniciado")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://PlayButton.gd" type="Script" id=1]
 [ext_resource path="res://ExitButton.gd" type="Script" id=2]
@@ -6,6 +6,9 @@
 [ext_resource path="res://Fonts/Theme/Menu.tres" type="Theme" id=4]
 [ext_resource path="res://assets/menu_back.png" type="Texture" id=5]
 [ext_resource path="res://assets/menu_item.png" type="Texture" id=6]
+[ext_resource path="res://MenuBackground.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Panel.gd" type="Script" id=8]
+[ext_resource path="res://sound/sfx/button.wav" type="AudioStream" id=9]
 
 [node name="Control" type="Control"]
 anchor_left = 0.269
@@ -20,36 +23,42 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Panel" type="Panel" parent="."]
+[node name="MenuBackground" parent="." instance=ExtResource( 7 )]
+position = Vector2( -134.831, -126.736 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -156.5
-margin_top = -146.0
-margin_right = 156.5
-margin_bottom = 146.0
+margin_left = -155.229
+margin_top = -142.475
+margin_right = 157.771
+margin_bottom = 149.525
+script = ExtResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Menu_Background" type="Sprite" parent="Panel"]
+[node name="Menu_Background" type="Sprite" parent="CanvasLayer/Panel"]
 position = Vector2( 155.679, 148.433 )
 scale = Vector2( 0.739727, 0.636999 )
 texture = ExtResource( 5 )
 
-[node name="Menu_item" type="Sprite" parent="Panel"]
+[node name="Menu_item" type="Sprite" parent="CanvasLayer/Panel"]
 position = Vector2( 70.7906, 173.617 )
 scale = Vector2( 0.233686, 0.270071 )
 texture = ExtResource( 6 )
 
-[node name="Menu_item2" type="Sprite" parent="Panel"]
+[node name="Menu_item2" type="Sprite" parent="CanvasLayer/Panel"]
 position = Vector2( 244.791, 174.033 )
 scale = Vector2( 0.233686, 0.266924 )
 texture = ExtResource( 6 )
 flip_h = true
 
-[node name="PlayButton" type="TextureButton" parent="Panel"]
+[node name="PlayButton" type="TextureButton" parent="CanvasLayer/Panel"]
 anchor_left = 0.5
 anchor_top = 0.47774
 anchor_right = 0.5
@@ -67,7 +76,7 @@ __meta__ = {
 "_edit_use_anchors_": true
 }
 
-[node name="Label" type="Label" parent="Panel/PlayButton"]
+[node name="Label" type="Label" parent="CanvasLayer/Panel/PlayButton"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -80,7 +89,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ExitButton" type="TextureButton" parent="Panel"]
+[node name="ExitButton" type="TextureButton" parent="CanvasLayer/Panel"]
 anchor_left = 0.5
 anchor_top = 0.513154
 anchor_right = 0.5
@@ -96,7 +105,7 @@ __meta__ = {
 "_edit_use_anchors_": true
 }
 
-[node name="AcceptDialog" type="AcceptDialog" parent="Panel/ExitButton"]
+[node name="AcceptDialog" type="AcceptDialog" parent="CanvasLayer/Panel/ExitButton"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -110,7 +119,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Panel/ExitButton"]
+[node name="Label" type="Label" parent="CanvasLayer/Panel/ExitButton"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -123,6 +132,10 @@ theme = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="button_down" from="Panel/PlayButton" to="Panel/PlayButton" method="_on_PlayButton_button_down"]
-[connection signal="button_up" from="Panel/ExitButton" to="Panel/ExitButton" method="_on_ExitButton_button_up"]
-[connection signal="confirmed" from="Panel/ExitButton/AcceptDialog" to="Panel/ExitButton" method="_on_AcceptDialog_confirmed"]
+
+[node name="SFX2" type="AudioStreamPlayer" parent="CanvasLayer/Panel/ExitButton"]
+stream = ExtResource( 9 )
+volume_db = -9.237
+[connection signal="button_up" from="CanvasLayer/Panel/PlayButton" to="CanvasLayer/Panel/PlayButton" method="_on_PlayButton_button_up"]
+[connection signal="button_up" from="CanvasLayer/Panel/ExitButton" to="CanvasLayer/Panel/ExitButton" method="_on_ExitButton_button_up"]
+[connection signal="confirmed" from="CanvasLayer/Panel/ExitButton/AcceptDialog" to="CanvasLayer/Panel/ExitButton" method="_on_AcceptDialog_confirmed"]
